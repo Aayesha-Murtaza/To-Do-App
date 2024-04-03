@@ -75,4 +75,4 @@ while (condition) {
         }
     }
 }
-console.log(chalk.bgCyanBright("\nThank you for using this CLI app!"));
+console.log(chalk.bgCyan("\nThank you for using this CLI app!"));
