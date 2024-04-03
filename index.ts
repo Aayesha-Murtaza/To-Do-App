@@ -2,15 +2,22 @@
 import inquirer from "inquirer";
 import chalk from "chalk";
 
-let todos = []; // list we'll store things to.
+let todos: any = []; // list we'll store things to.
 let condition = true; //variable for while loop condition
 console.log(chalk.bgMagenta("Welcome to Aayesha's Todo App!"));
 while (condition) {
+  console.log('');
   let operationAns = await inquirer.prompt({
     name: "operation",
-    message: "\nWhat do you want to do? ",
+    message: "What do you want to do? ",
     type: "list",
-    choices: ["Add task", "Delete Task", "Exit"],
+    choices: [
+      "Add task",
+      "Delete task",
+      "Modify task",
+      "View all tasks",
+      "Exit",
+    ],
   });
 
   if (operationAns.operation === "Add task") {
@@ -23,8 +30,7 @@ while (condition) {
     ]);
     todos.push(addTasks.toDo);
     console.log(chalk.green("Task added successfully!"));
-    console.log("Updated list:", todos);
-  } else if (operationAns.operation === "Delete Task") {
+  } else if (operationAns.operation === "Delete task") {
     let deleteTask = await inquirer.prompt({
       name: "taskToRemove",
       type: "input",
@@ -42,9 +48,38 @@ while (condition) {
       );
     }
 
-    console.log("Remaining tasks:", todos);
   } else if (operationAns.operation === "Exit") {
     condition = false;
-    console.log(chalk.yellowBright("\nThank you for using this CLI app!"));
+  } else if (operationAns.operation == "View all tasks") {
+    console.log("All tasks :", todos);
+  } else if (operationAns.operation == "Modify task") {
+    let modifyTask = await inquirer.prompt([
+      {
+        name: "modify",
+        type: "input",
+        message: "Enter the task which you want to modify:",
+      },
+    ]);
+    let updatetask = todos.indexOf(modifyTask.modify);
+    if (updatetask !== -1) {
+      let updateTask = await inquirer.prompt([
+        {
+          name: "updated",
+          type: "input",
+          message: "Enter new task:",
+        },
+      ]);
+      todos[updatetask] = updateTask.updated;
+      console.log(
+        chalk.green(
+          `"${modifyTask.modify}" has been updated to "${updateTask.updated}".`
+        )
+      );
+    } else {
+      console.log(
+        chalk.yellow(`"${modifyTask.modify}" is not found in the list.`)
+      );
+    }
   }
 }
+console.log(chalk.bgCyanBright("\nThank you for using this CLI app!"));
